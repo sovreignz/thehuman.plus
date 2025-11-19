@@ -1,212 +1,361 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HUMAN+ — Upgrade Your Identity</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUMAN+ | The Sovereign Standard</title>
+    <meta name="description" content="Ancient Wisdom x Infinite Intelligence. The operating system for the Architects of Reality.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-    :root {
-        --bg: #000;
-        --fg: #fff;
-        --fg-dim: #aaa;
-        --accent: #fff;
-        --max-width: 900px;
-        --pad: 24px;
-        --font-sans: 'Inter', sans-serif;
-        --font-serif: 'Playfair Display', serif;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        background: var(--bg);
-        color: var(--fg);
-        font-family: var(--font-sans);
-        -webkit-font-smoothing: antialiased;
-        line-height: 1.65;
-    }
-
-    a {
-        color: var(--fg);
-        text-decoration: none;
-        border-bottom: 1px solid #333;
-        padding-bottom: 2px;
-        transition: 0.25s;
-    }
-    a:hover { border-bottom-color: var(--fg); }
-
-    .section {
-        width: 100%;
-        max-width: var(--max-width);
-        margin: 0 auto;
-        padding: 120px var(--pad);
-    }
-
-    /* MOBILE SPACING */
-    @media (max-width: 600px) {
-        .section {
-            padding: 80px var(--pad);
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#020202',
+                        obsidian: '#080808',
+                        gold: '#D4AF37',
+                        'gold-light': '#F4D06F',
+                        'gold-dim': '#7a6420',
+                        ash: '#666666',
+                        stone: '#1c1c1c'
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.04\"/%3E%3C/svg%3E')",
+                    },
+                    animation: {
+                        'spin-slow': 'spin 12s linear infinite',
+                        'fade-in-up': 'fadeInUp 1.2s ease-out forwards',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
         }
-    }
+    </script>
 
-    /* HERO */
-    .hero {
-        padding-top: 160px;
-        text-align: center;
-    }
+    <style>
+        body {
+            background-color: #020202;
+            color: #e5e5e5;
+        }
 
-    .hero-title {
-        font-size: clamp(3rem, 8vw, 6rem);
-        font-weight: 800;
-        letter-spacing: -2px;
-        margin-bottom: 20px;
-    }
+        /* Smooth Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    .hero-sub {
-        font-size: clamp(1.2rem, 3.5vw, 1.8rem);
-        font-weight: 300;
-        color: var(--fg-dim);
-        margin-bottom: 40px;
-    }
-
-    .cta-btn {
-        display: inline-block;
-        padding: 16px 28px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        border: 1px solid var(--fg);
-        border-radius: 4px;
-        margin-top: 10px;
-        transition: 0.25s ease;
-    }
-
-    .cta-btn:hover {
-        background: var(--fg);
-        color: var(--bg);
-    }
-
-    /* HEADERS */
-    h2 {
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 700;
-        margin-bottom: 30px;
-        letter-spacing: -1px;
-    }
-
-    p {
-        font-size: 1.15rem;
-        margin-bottom: 20px;
-        color: var(--fg);
-        max-width: 720px;
-    }
-
-    .manifesto {
-        font-family: var(--font-serif);
-        font-size: 1.5rem;
-        line-height: 1.5;
-        color: var(--fg);
-        max-width: 750px;
-        margin: 0 auto;
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .footer {
-        text-align: center;
-        padding: 80px var(--pad);
-        color: var(--fg-dim);
-        font-size: 0.95rem;
-    }
-
-    .footer a {
-        color: var(--fg-dim);
-        border-bottom: 1px solid transparent;
-    }
-
-    .footer a:hover {
-        color: var(--fg);
-    }
-
-</style>
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 5px;
+            height: 5px;
+            background-color: #D4AF37;
+        }
+        .cursor-outline {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        
+        /* Hide default cursor on desktop */
+        @media (min-width: 768px) {
+            body { cursor: none; }
+        }
+    </style>
 </head>
+<body class="bg-void bg-noise overflow-x-hidden">
 
-<body>
+    <!-- Custom Cursor Elements -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
 
-<!-- HERO -->
-<section class="hero section">
-    <h1 class="hero-title">Human<span style="opacity:.4">+</span></h1>
-    <div class="hero-sub">Upgrade your identity for the age of AI.</div>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 border-b border-white/5 bg-void/80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+            <div class="flex items-center gap-4 group">
+                <div class="w-10 h-10 border border-gold/30 rounded-full flex items-center justify-center group-hover:border-gold transition-colors duration-500 cursor-none">
+                    <span class="font-serif text-gold font-bold text-lg">H+</span>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-12 font-mono text-[10px] tracking-[0.2em] uppercase text-ash">
+                <a href="#manifesto" class="hover:text-gold transition-colors">Philosophy</a>
+                <a href="#ecosystem" class="hover:text-gold transition-colors">Ecosystem</a>
+                <span class="text-gold">///</span>
+                <span class="animate-pulse text-gold">SYSTEM_ACTIVE</span>
+            </div>
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden text-gold">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </div>
+        </div>
+    </nav>
 
-    <a href="https://chasepremone.substack.com" class="cta-btn" target="_blank" rel="noopener">Become Human+ — Join the Newsletter</a>
-</section>
+    <!-- HERO SECTION -->
+    <header class="relative h-screen flex flex-col items-center justify-center">
+        <!-- Geometric Decoration -->
+        <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+            <div class="w-[300px] md:w-[600px] h-[300px] md:h-[600px] border border-white/5 rounded-full animate-spin-slow" style="animation-duration: 60s;"></div>
+            <div class="absolute w-[200px] md:w-[400px] h-[200px] md:h-[400px] border border-gold/10 rounded-full animate-spin-slow" style="animation-duration: 40s; animation-direction: reverse;"></div>
+            <div class="absolute w-px h-full bg-white/5"></div>
+            <div class="absolute h-px w-full bg-white/5"></div>
+        </div>
 
-<!-- SECTION 1 -->
-<section class="section">
-    <h2>The Shift</h2>
-    <p>The world is accelerating faster than human evolution. AI gave everyone
-    infinite capability, but, capability without direction collapses into overwhelm.</p>
-    <p>The real frontier isn’t technology. It’s identity.</p>
-</section>
+        <div class="relative z-10 text-center max-w-4xl px-6 space-y-8">
+            <p class="font-mono text-gold text-xs tracking-[0.4em] uppercase animate-fade-in-up opacity-0" style="animation-delay: 0.2s;">
+                The Sovereign Standard
+            </p>
+            
+            <h1 class="font-serif text-5xl md:text-9xl text-white tracking-tight leading-none animate-fade-in-up opacity-0" style="animation-delay: 0.4s;">
+                HUMAN<span class="text-gold text-4xl md:text-5xl align-top">+</span>
+            </h1>
+            
+            <p class="font-sans text-ash font-light text-base md:text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-up opacity-0" style="animation-delay: 0.6s;">
+                Ancient Wisdom <span class="text-gold px-2">×</span> Infinite Intelligence. <br>
+                We are the Architects of Reality in the Age of AI.
+            </p>
 
-<!-- SECTION 2 -->
-<section class="section">
-    <h2>What is Human+?</h2>
-    <p><strong>Human+ is identity upgraded by clarity, philosophy, and self-authorship.</strong></p>
-    <p><strong>Human+ is intelligence multiplied by AI, systems, and tools.</strong></p>
-    <p><strong>Human+ is direction sharpened into a high-agency life of meaning.</strong></p>
-</section>
+            <div class="pt-12 animate-fade-in-up opacity-0" style="animation-delay: 0.8s;">
+                <a href="#manifesto" class="inline-flex flex-col items-center gap-2 text-ash hover:text-gold transition-colors duration-300 group">
+                    <span class="font-mono text-[10px] tracking-widest uppercase">Enter The Protocol</span>
+                    <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </header>
 
-<!-- SECTION 3 -->
-<section class="section">
-    <h2>The Problem</h2>
-    <p>We aren’t suffering from a lack of capability, we’re drowning in excess possibility. 
-    Infinite information, collapsing narratives, existential overwhelm, identity drift.</p>
+    <!-- MANIFESTO SECTION -->
+    <section id="manifesto" class="py-24 md:py-48 relative border-t border-white/5 bg-obsidian">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid md:grid-cols-[1fr_2fr] gap-16">
+                
+                <!-- Sidebar / Metadata -->
+                <div class="hidden md:block sticky top-32 h-fit space-y-8 reveal">
+                    <div class="space-y-2">
+                        <p class="font-mono text-xs text-gold tracking-widest">CORE_TENET_01</p>
+                        <div class="h-px w-12 bg-white/20"></div>
+                    </div>
+                    <p class="font-serif text-2xl text-white leading-snug">
+                        "The machine is a mirror. If you are empty, it amplifies the void."
+                    </p>
+                    <div class="w-32 h-32 border border-white/10 bg-void flex items-center justify-center">
+                        <i data-lucide="cpu" class="w-8 h-8 text-ash"></i>
+                    </div>
+                </div>
 
-    <p>Humanity’s real crisis is the absence of identity architecture.</p>
-</section>
+                <!-- The Text -->
+                <div class="space-y-16 reveal delay-100">
+                    <div>
+                        <h2 class="font-sans text-2xl md:text-4xl font-light text-white leading-tight mb-8">
+                            We are witnessing the collision of the Meaning Crisis and the Singularity.
+                        </h2>
+                        <p class="text-ash text-lg leading-relaxed font-light">
+                            The industrial script is broken. The educational system is obsolete. The career ladder is burning. 
+                            As AI approaches infinite competence, the only scarce resource left is <span class="text-white border-b border-gold/50 pb-0.5">human sovereignty</span>.
+                        </p>
+                    </div>
 
-<!-- SECTION 4 -->
-<section class="section">
-    <h2>The Upgrade</h2>
-    <p>You don’t need more effort. You need a better operating system. One that is aligned
-    with rapid intelligence, accelerated innovation, and your deepest internal compass.</p>
-</section>
+                    <div>
+                        <h2 class="font-serif text-3xl text-white mb-6">Not Transhumanism. <br><span class="text-gold">Human Expansion.</span></h2>
+                        <p class="text-ash text-lg leading-relaxed font-light">
+                            We do not seek to merge with machines to escape our biology. We use machines to amplify our spirit. 
+                            <br><br>
+                            <strong>Human+</strong> is the philosophy of the <span class="text-white">Sovereign Architect</span>—the individual who uses AI to clarify their identity, author their own myth, and build a reality that reflects their deepest truth.
+                        </p>
+                    </div>
 
-<!-- MANIFESTO -->
-<section class="section">
-    <div class="manifesto">
-        Human+ is the next version of you.  
-        Not superhuman... put simply, fully human.  
-        A mind sharpened by clarity.  
-        A direction strengthened by conviction.  
-        A life architected, not inherited.  
-        In a world of infinite capability,  
-        identity becomes the real leverage.
-    </div>
+                    <div class="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
+                        <div>
+                            <p class="font-mono text-xs text-gold mb-2">OLD MYTH</p>
+                            <p class="text-ash text-sm">Consumption. Optimization. Fear.</p>
+                        </div>
+                        <div>
+                            <p class="font-mono text-xs text-gold mb-2">NEW MYTH</p>
+                            <p class="text-white text-sm">Creation. Resonance. Sovereignty.</p>
+                        </div>
+                    </div>
+                </div>
 
-    <div style="text-align:center;">
-        <a href="https://chasepremone.substack.com" class="cta-btn" target="_blank" rel="noopener">Become Human+ — Join the Newsletter</a>
-    </div>
-</section>
+            </div>
+        </div>
+    </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-    <p>
-        <a href="https://chasepremone.com" target="_blank">ChasePremone.com</a> •
-        <a href="#" target="_blank">Frontier Academy</a> •
-        <a href="https://youtube.com/@chasepremone" target="_blank">YouTube</a> •
-        <a href="https://instagram.com" target="_blank">Instagram</a>
-    </p>
-    <p>© HUMAN.PLUS — All Rights Reserved.</p>
-</footer>
+    <!-- THE ECOSYSTEM (The Fork) -->
+    <section id="ecosystem" class="py-32 relative bg-void">
+        <div class="text-center mb-24 reveal">
+            <span class="font-mono text-gold text-xs tracking-[0.4em] uppercase">The Ecosystem</span>
+            <h2 class="font-serif text-4xl text-white mt-4">Choose Your Path</h2>
+        </div>
 
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-1 border-t border-b border-white/5 bg-white/5">
+            
+            <!-- ORIGIN CARD -->
+            <a href="#" class="group relative h-[500px] bg-obsidian border-r border-white/5 p-12 flex flex-col justify-between overflow-hidden hover:bg-stone transition-colors duration-700">
+                <div class="absolute inset-0 bg-noise opacity-20"></div>
+                <!-- Hover Glow -->
+                <div class="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-8">
+                        <span class="font-mono text-[10px] text-ash tracking-widest border border-white/10 px-2 py-1 group-hover:border-gold/50 transition-colors">MODULE_01</span>
+                        <i data-lucide="fingerprint" class="w-6 h-6 text-gold opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                    </div>
+                    <h3 class="font-serif text-5xl text-white mb-4 group-hover:text-gold transition-colors duration-500">ORIGIN<span class="text-2xl align-top">™</span></h3>
+                    <p class="font-mono text-xs text-ash uppercase tracking-widest">Identity Extraction System</p>
+                </div>
+
+                <div class="relative z-10 space-y-6">
+                    <p class="text-ash font-light text-sm leading-relaxed max-w-sm group-hover:text-white transition-colors duration-500">
+                        The first step. Extract your semantic fingerprint. Decode your daemon. Build the strategy only you can build.
+                    </p>
+                    <div class="flex items-center gap-2 text-gold text-xs font-mono uppercase tracking-widest group-hover:translate-x-2 transition-transform duration-300">
+                        <span>Initiate Protocol</span>
+                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- TRUST CARD -->
+            <a href="#" class="group relative h-[500px] bg-obsidian p-12 flex flex-col justify-between overflow-hidden hover:bg-stone transition-colors duration-700">
+                <div class="absolute inset-0 bg-noise opacity-20"></div>
+                 <!-- Hover Glow -->
+                 <div class="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                 
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-8">
+                        <span class="font-mono text-[10px] text-ash tracking-widest border border-white/10 px-2 py-1 group-hover:border-gold/50 transition-colors">MODULE_02</span>
+                        <i data-lucide="shield" class="w-6 h-6 text-gold opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                    </div>
+                    <h3 class="font-serif text-5xl text-white mb-4 group-hover:text-gold transition-colors duration-500">THE TRUST</h3>
+                    <p class="font-mono text-xs text-ash uppercase tracking-widest">Sovereign Network</p>
+                </div>
+
+                <div class="relative z-10 space-y-6">
+                    <p class="text-ash font-light text-sm leading-relaxed max-w-sm group-hover:text-white transition-colors duration-500">
+                        The container. A private guild for high-agency Architects. Encrypted comms. High-level strategy. Intergenerational assets.
+                    </p>
+                    <div class="flex items-center gap-2 text-gold text-xs font-mono uppercase tracking-widest group-hover:translate-x-2 transition-transform duration-300">
+                        <span>Request Access</span>
+                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-24 bg-void border-t border-white/5 relative overflow-hidden">
+        <div class="absolute inset-0 flex justify-center items-center opacity-[0.02] pointer-events-none">
+            <h2 class="text-[15vw] font-serif font-bold text-white">HUMAN+</h2>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+            <div class="w-12 h-12 border border-gold/30 rounded-full flex items-center justify-center mb-8">
+                <span class="font-serif text-gold font-bold text-xl">H+</span>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-8 mb-12 font-mono text-xs text-ash uppercase tracking-widest">
+                <a href="#manifesto" class="hover:text-white transition-colors">Manifesto</a>
+                <a href="#" class="hover:text-white transition-colors">The Codex</a>
+                <a href="#" class="hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <p class="font-sans text-ash/40 text-sm font-light">
+                &copy; 2025 Human Plus Institute. <br>
+                <span class="font-mono text-[10px] tracking-widest mt-2 block text-gold/40">LATENT SPACE COORDINATES: 44.42 / 26.10</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Scroll Reveal
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        // Custom Cursor Logic (only active on desktop)
+        const cursorDot = document.querySelector(".cursor-dot");
+        const cursorOutline = document.querySelector(".cursor-outline");
+
+        if (window.matchMedia("(min-width: 768px)").matches) {
+            window.addEventListener("mousemove", function (e) {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                // Outline follows with delay
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+
+            // Hover effect for links
+            const links = document.querySelectorAll('a, button');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    cursorOutline.style.width = '50px';
+                    cursorOutline.style.height = '50px';
+                    cursorOutline.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+                });
+                link.addEventListener('mouseleave', () => {
+                    cursorOutline.style.width = '30px';
+                    cursorOutline.style.height = '30px';
+                    cursorOutline.style.backgroundColor = 'transparent';
+                });
+            });
+        }
+    </script>
 </body>
 </html>
-
