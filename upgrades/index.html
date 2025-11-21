@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUMAN+ | UPGRADES</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        void: '#020202',
+                        obsidian: '#080808',
+                        // Rose Gold Palette
+                        gold: '#B88A6E',
+                        'gold-light': '#D4C0AD',
+                        'gold-dim': '#8A5E45',
+                        ash: '#666666',
+                        stone: '#1c1c1c'
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.04\"/%3E%3C/svg%3E')",
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020202;
+            color: #e5e5e5;
+        }
+
+        /* Card Hover Glow */
+        .artifact-card {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .artifact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(184, 138, 110, 0.1);
+            border-color: rgba(184, 138, 110, 0.4);
+        }
+
+        /* Button Styles */
+        .btn-gold {
+            background: linear-gradient(45deg, #B88A6E, #9E7459);
+            color: #000;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            box-shadow: 0 0 20px rgba(184, 138, 110, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020202; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #B88A6E; }
+    </style>
+</head>
+<body class="bg-void bg-noise min-h-screen selection:bg-gold selection:text-void">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 top-0 border-b border-white/5 bg-void/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="group flex items-center gap-3">
+                <div class="w-8 h-8 border border-gold/40 rounded-full flex items-center justify-center transition-all duration-500">
+                    <span class="font-serif text-gold font-bold">H+</span>
+                </div>
+                <span class="font-mono text-xs tracking-[0.2em] text-ash group-hover:text-gold transition-colors">THE ARMORY</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <button class="relative p-2 hover:text-gold transition-colors">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-gold rounded-full"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="pt-40 pb-20 px-6 text-center relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 blur-[120px] rounded-full -z-10"></div>
+        <h1 class="font-serif text-5xl md:text-7xl text-white mb-6 tracking-tight">UPGRADES</h1>
+        <p class="font-mono text-xs text-gold tracking-[0.3em] uppercase text-center">
+  Tools for those who refuse the default setting<br>
+  <span class="block">AUGMENT. ENHANCE. ASCEND.</span>
+</p>
+
+    </header>
+
+    <!-- Product Grid -->
+    <main class="max-w-7xl mx-auto px-6 pb-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+            <!-- Products injected by JS -->
+        </div>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-void/90 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+
+        <!-- Modal Panel -->
+        <div class="relative z-10 flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-obsidian border border-gold/30 text-left shadow-[0_0_50px_rgba(0,0,0,0.8)] transition-all sm:my-8 sm:w-full sm:max-w-4xl">
+                
+                <!-- Close Button -->
+                <button onclick="closeModal()" class="absolute top-4 right-4 z-20 text-ash hover:text-gold transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+
+                <div class="grid md:grid-cols-2">
+                    <!-- Image Side -->
+                    <div class="h-64 md:h-auto bg-stone relative overflow-hidden">
+                        <img id="modal-image" src="" alt="Product Image" class="w-full h-full object-cover opacity-80">
+                        <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent"></div>
+                    </div>
+
+                    <!-- Details Side -->
+                    <div class="p-8 md:p-12 flex flex-col justify-between">
+                        <div>
+                            <p class="font-mono text-[10px] text-gold tracking-widest uppercase mb-2" id="modal-category">Category</p>
+                            <h2 class="font-serif text-3xl text-white mb-4" id="modal-title">Product Title</h2>
+                            <p class="text-ash font-light text-sm leading-relaxed mb-8" id="modal-desc">Description goes here.</p>
+                            
+                            <div class="space-y-3 mb-8">
+                                <div class="flex items-center gap-3 text-xs text-white/80 font-mono">
+                                    <i data-lucide="check" class="w-4 h-4 text-gold"></i>
+                                    <span id="modal-feat-1">Feature 1</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs text-white/80 font-mono">
+                                    <i data-lucide="check" class="w-4 h-4 text-gold"></i>
+                                    <span id="modal-feat-2">Feature 2</span>
+                                </div>
+                                <div class="flex items-center gap-3 text-xs text-white/80 font-mono">
+                                    <i data-lucide="check" class="w-4 h-4 text-gold"></i>
+                                    <span id="modal-feat-3">Feature 3</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-8 border-t border-white/10 flex items-center justify-between">
+                            <span class="font-serif text-2xl text-white" id="modal-price">$00.00</span>
+                            <button class="btn-gold px-8 py-3 font-mono text-xs font-bold uppercase tracking-widest hover:scale-105 transition-transform">
+                                Acquire Artifact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Product Data
+        const products = [
+            {
+                id: 'codex-template',
+                title: 'The Codex Template',
+                category: 'Notion System',
+                price: '$47.00',
+                image: 'https://images.unsplash.com/photo-1635243604022-324d3a8d90b7?q=80&w=2000&auto=format&fit=crop',
+                desc: 'The exact Notion architecture used to build the Founder\'s Codex. A digital second brain for capturing your lexicon, IP, and strategic vector.',
+                features: ['Mythic Dashboard', 'Lexicon Database', 'Strategy Canvas']
+            },
+            {
+                id: 'daemon-protocol',
+                title: 'The Daemon Protocol',
+                category: 'Audio Series',
+                price: '$97.00',
+                image: 'https://images.unsplash.com/photo-1614726365723-49cfae927846?q=80&w=2000&auto=format&fit=crop',
+                desc: 'A 4-part audio induction designed to help you locate your obsession signal. This is not a course; it is a guided psychological excavation.',
+                features: ['4 Hours Audio', 'Workbook PDF', 'Ritual Guide']
+            },
+            {
+                id: 'lexicon-builder',
+                title: 'Lexicon Builder',
+                category: 'AI Prompt Library',
+                price: '$27.00',
+                image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000&auto=format&fit=crop',
+                desc: 'Stop using generic marketing words. This prompt library trains LLMs to speak in your specific, sovereign tone of voice.',
+                features: ['Claude Prompts', 'Voice Definition', 'Style Guide']
+            },
+            {
+                id: 'icon-pack',
+                title: 'Human+ Iconography',
+                category: 'Design Assets',
+                price: '$35.00',
+                image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop',
+                desc: 'A collection of 50+ mythic-minimalist icons and glyphs. Rose gold and obsidian styles ready for your landing pages and decks.',
+                features: ['50+ Vectors', 'Figma File', 'PNG/SVG']
+            },
+            {
+                id: 'reality-blueprints',
+                title: 'Reality Blueprints',
+                category: 'PDF Guide',
+                price: '$19.00',
+                image: 'https://images.unsplash.com/photo-1485518882345-15568b007407?q=80&w=2000&auto=format&fit=crop',
+                desc: 'The architectural drawings for a sovereign lifestyle. Maps out the 4 pillars: Environment, Wealth, Body, and Mind.',
+                features: ['High-Res PDF', 'Printable', 'Worksheets']
+            },
+            {
+                id: 'os-vault',
+                title: 'Sovereign OS',
+                category: 'Obsidian Vault',
+                price: '$149.00',
+                image: 'https://images.unsplash.com/photo-1516481265257-97e5f4bc50d5?q=80&w=2000&auto=format&fit=crop',
+                desc: 'The ultimate knowledge management system for connected thought. Pre-configured Obsidian vault with Zettelkasten plugins and Human+ themes.',
+                features: ['Pre-linked Nodes', 'Custom Theme', 'Setup Guide']
+            }
+        ];
+
+        // Render Grid
+        const grid = document.getElementById('product-grid');
+        
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'artifact-card bg-obsidian border border-white/5 rounded-lg overflow-hidden group cursor-pointer flex flex-col';
+            card.innerHTML = `
+                <div class="h-48 overflow-hidden relative" onclick="openModal('${product.id}')">
+                    <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-obsidian to-transparent opacity-80"></div>
+                    <div class="absolute top-3 right-3 bg-black/50 backdrop-blur px-2 py-1 border border-white/10 rounded text-[10px] font-mono text-gold uppercase tracking-widest">
+                        ${product.category}
+                    </div>
+                </div>
+                <div class="p-6 flex-1 flex flex-col">
+                    <h3 class="font-serif text-xl text-white mb-1 group-hover:text-gold transition-colors" onclick="openModal('${product.id}')">${product.title}</h3>
+                    <p class="text-ash text-xs leading-relaxed mb-6 line-clamp-2">${product.desc}</p>
+                    
+                    <div class="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+                        <span class="font-mono text-white text-sm">${product.price}</span>
+                        <button class="text-[10px] font-mono uppercase tracking-widest text-gold hover:text-white border border-gold/30 hover:border-white px-4 py-2 transition-colors" onclick="buyNow('${product.id}')">
+                            Acquire
+                        </button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('product-modal');
+        
+        function openModal(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            // Populate Modal
+            document.getElementById('modal-image').src = product.image;
+            document.getElementById('modal-category').innerText = product.category;
+            document.getElementById('modal-title').innerText = product.title;
+            document.getElementById('modal-desc').innerText = product.desc;
+            document.getElementById('modal-price').innerText = product.price;
+            
+            // Populate Features safely
+            const feats = product.features || [];
+            document.getElementById('modal-feat-1').innerText = feats[0] || '';
+            document.getElementById('modal-feat-2').innerText = feats[1] || '';
+            document.getElementById('modal-feat-3').innerText = feats[2] || '';
+
+            // Show
+            modal.classList.remove('hidden');
+            // Small delay to allow display:block to render before opacity transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Placeholder Buy Function
+        function buyNow(id) {
+            // This is where you'll integrate Lemon Squeezy later
+            console.log(`Initiating checkout for: ${id}`);
+            // Example: LemonSqueezy.Url.Open(checkoutUrl);
+        }
+
+        // Re-init icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
