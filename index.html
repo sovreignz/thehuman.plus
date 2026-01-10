@@ -1,369 +1,666 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUMAN+ | The Sovereign Standard</title>
-    <meta name="description" content="Ancient Wisdom x Infinite Intelligence. The operating system for the Architects of Reality.">
+    <title>1240 Highland Ave - Interactive Listing</title>
     
-    <!-- Fonts --><link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- Icons --><script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Lucide via UNPKG for simple SVG usage) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        void: '#020202',
-                        obsidian: '#080808',
-                        // New Rose Gold / Bronze palette
-                        gold: '#B88A6E', // Replaced primary gold
-                        'gold-light': '#D4C0AD', // Replaced lighter gold
-                        'gold-dim': '#7a6420', // Kept dim as it's not directly used for accent but for opacity fade
-                        ash: '#666666',
-                        stone: '#1c1c1c'
-                    },
                     fontFamily: {
-                        serif: ['Cinzel', 'serif'],
                         sans: ['Inter', 'sans-serif'],
-                        mono: ['Space Mono', 'monospace'],
+                        serif: ['Playfair Display', 'serif'],
                     },
-                    backgroundImage: {
-                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.04\"/%3E%3C/svg%3E')",
-                    },
-                    animation: {
-                        'spin-slow': 'spin 12s linear infinite',
-                        'fade-in-up': 'fadeInUp 1.2s ease-out forwards',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                    colors: {
+                        brand: {
+                            50: '#f4f7f6',
+                            100: '#e3eBE8',
+                            500: '#4A6C6F', // Muted Teal/Slate
+                            900: '#1A2E30',
                         }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
                     }
                 }
             }
         }
     </script>
-
     <style>
-        body {
-            background-color: #020202;
-            color: #e5e5e5;
+        /* Custom scrollbar for horizontal nav */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        /* Smooth Reveal Utility */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Custom Cursor */
-        .cursor-dot,
-        .cursor-outline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        .cursor-dot {
-            width: 5px;
-            height: 5px;
-            background-color: #B88A6E; /* Updated cursor dot */
-        }
-        .cursor-outline {
-            width: 30px;
-            height: 30px;
-            border: 1px solid rgba(184, 138, 110, 0.5); /* Updated cursor outline */
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        .no-scrollbar {
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
         }
         
-        /* Hide default cursor on desktop */
-        @media (min-width: 768px) {
-            body { cursor: none; }
+        /* Glass Background Mesh */
+        body {
+            background-color: #f3f4f6;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(190,40%,75%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(240,30%,85%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 100%, hsla(160,30%,80%,1) 0, transparent 50%), 
+                radial-gradient(at 0% 100%, hsla(190,40%,90%,1) 0, transparent 50%);
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .glass-card-dark {
+            background: rgba(26, 46, 48, 0.85); /* Brand 900 with opacity */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .glass-pill:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .glass-pill-active {
+            background: rgba(74, 108, 111, 0.9); /* Brand 500 */
+            color: white;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(74, 108, 111, 0.2);
+            box-shadow: 0 4px 12px rgba(74, 108, 111, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="bg-void bg-noise overflow-x-hidden">
+<body class="text-slate-800 antialiased min-h-screen">
+    <div id="root"></div>
 
-    <!-- Custom Cursor Elements --><div class="cursor-dot hidden md:block"></div>
-    <div class="cursor-outline hidden md:block"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-    <!-- Navigation --><nav class="fixed w-full z-50 top-0 border-b border-white/5 bg-void/80 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-            <div class="flex items-center gap-4 group">
-                <div class="w-10 h-10 border border-gold/30 rounded-full flex items-center justify-center group-hover:border-gold transition-colors duration-500 cursor-none">
-                    <span class="font-serif text-gold font-bold text-lg">H+</span>
-                </div>
-            </div>
-            <div class="hidden md:flex items-center gap-12 font-mono text-[10px] tracking-[0.2em] uppercase text-ash">
-                <a href="#manifesto" class="hover:text-gold transition-colors">Philosophy</a>
-                <a href="#ecosystem" class="hover:text-gold transition-colors">Ecosystem</a>
-                <span class="text-gold">///</span>
-                <span class="animate-pulse text-gold">SYSTEM_ACTIVE</span>
-            </div>
-            <!-- Mobile Menu Button --><div class="md:hidden text-gold">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </div>
-        </div>
-    </nav>
+        // --- ICONS ---
+        const Icons = {
+            Kitchen: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2h18"/><path d="M5 2v20"/><path d="M19 2v20"/><path d="M9 2v20"/></svg>,
+            Layout: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>,
+            Suite: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>,
+            Systems: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+            Light: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>,
+            Outdoor: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="8" y="10" width="8" height="14" rx="1"/><path d="M3 22h18"/></svg>,
+            Neighborhood: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v8"/><path d="M2 11h11"/><path d="M20 21v-8a2 2 0 0 0-2-2h-3"/><path d="M15 11h5"/><path d="M7 21v-4a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v4"/><path d="M3 7 7 3l4 4"/><path d="M15 7l3-4 4 4"/></svg>,
+            Numbers: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+            Check: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+            ArrowRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        };
 
-    <!-- HERO SECTION --><header class="relative h-screen flex flex-col items-center justify-center">
-        <!-- Geometric Decoration --><div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-            <div class="w-[300px] md:w-[600px] h-[300px] md:h-[600px] border border-white/5 rounded-full animate-spin-slow" style="animation-duration: 60s;"></div>
-            <div class="absolute w-[200px] md:w-[400px] h-[200px] md:h-[400px] border border-gold/10 rounded-full animate-spin-slow" style="animation-duration: 40s; animation-direction: reverse;"></div>
-            <div class="absolute w-px h-full bg-white/5"></div>
-            <div class="absolute h-px w-full bg-white/5"></div>
-        </div>
-
-        <div class="relative z-10 text-center max-w-4xl px-6 space-y-8">
-            <p class="font-mono text-gold text-xs tracking-[0.4em] uppercase animate-fade-in-up opacity-0" style="animation-delay: 0.2s;">
-                The Sovereign Standard
-            </p>
-            
-            <h1 class="font-serif text-5xl md:text-9xl text-white tracking-tight leading-none animate-fade-in-up opacity-0" style="animation-delay: 0.4s;">
-                HUMAN<span class="text-gold text-4xl md:text-5xl align-top">+</span>
-            </h1>
-            
-            <p class="font-sans text-ash font-light text-base md:text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-up opacity-0" style="animation-delay: 0.6s;">
-                Ancient Wisdom <span class="text-gold px-2">×</span> Infinite Intelligence. <br>
-                We are the Architects of Reality in the Age of AI.
-            </p>
-
-            <div class="pt-12 animate-fade-in-up opacity-0" style="animation-delay: 0.8s;">
-                <a href="#manifesto" class="inline-flex flex-col items-center gap-2 text-ash hover:text-gold transition-colors duration-300 group">
-                    <span class="font-mono text-[10px] tracking-widest uppercase">Enter The Protocol</span>
-                    <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- MANIFESTO SECTION --><section id="manifesto" class="py-24 md:py-48 relative border-t border-white/5 bg-obsidian">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="grid md:grid-cols-[1fr_2fr] gap-16">
-                
-                <!-- Sidebar / Metadata --><div class="hidden md:block sticky top-32 h-fit space-y-8 reveal">
-                    <div class="space-y-2">
-                        <p class="font-mono text-xs text-gold tracking-widest">CORE_TENET_01</p>
-                        <div class="h-px w-12 bg-white/20"></div>
-                    </div>
-                    <p class="font-serif text-2xl text-white leading-snug">
-                        "The machine is a mirror. If you are empty, it amplifies the void."
-                    </p>
-                    <div class="w-32 h-32 border border-white/10 bg-void flex items-center justify-center">
-                        <i data-lucide="cpu" class="w-8 h-8 text-ash"></i>
-                    </div>
-                </div>
-
-                <!-- The Text --><div class="space-y-16 reveal delay-100">
-                    <div>
-                        <h2 class="font-sans text-2xl md:text-4xl font-light text-white leading-tight mb-8">
-                            We are witnessing the collision of the Meaning Crisis and the Singularity.
-                        </h2>
-                        <p class="text-ash text-lg leading-relaxed font-light">
-                            The industrial script is broken. The educational system is obsolete. The career ladder is burning. 
-                            As AI approaches infinite competence, the only scarce resource left is <span class="text-white border-b border-gold/50 pb-0.5">human sovereignty</span>.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h2 class="font-serif text-3xl text-white mb-6">Not Transhumanism. <br><span class="text-gold">Human Expansion.</span></h2>
-                        <p class="text-ash text-lg leading-relaxed font-light">
-                            We do not seek to merge with machines to escape our biology. We use machines to amplify our spirit. 
-                            <br><br>
-                            <strong>Human+</strong> is the philosophy of the <span class="text-white">Sovereign Architect</span>—the individual who uses AI to clarify their identity, author their own myth, and build a reality that reflects their deepest truth.
-                        </p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-8 pt-8 border-t border-white/5">
-                        <div>
-                            <p class="font-mono text-xs text-gold mb-2">OLD MYTH</p>
-                            <p class="text-ash text-sm">Consumption. Optimization. Fear.</p>
-                        </div>
-                        <div>
-                            <p class="font-mono text-xs text-gold mb-2">NEW MYTH</p>
-                            <p class="text-white text-sm">Creation. Resonance. Sovereignty.</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- THE ECOSYSTEM (The 3-Way Split) --><section id="ecosystem" class="py-32 relative bg-void">
-        <div class="text-center mb-24 reveal">
-            <span class="font-mono text-gold text-xs tracking-[0.4em] uppercase">The Ecosystem</span>
-            <h2 class="font-serif text-4xl text-white mt-4">Choose Your Path</h2>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-1 border-t border-b border-white/5 bg-white/5">
-            
-            <!-- ORIGIN CARD --><a href="https://origin.thehuman.plus" class="group relative h-[500px] bg-obsidian border-r border-white/5 p-8 flex flex-col justify-between overflow-hidden hover:bg-stone transition-colors duration-700">
-                <div class="absolute inset-0 bg-noise opacity-20"></div>
-                <!-- Hover Glow --><div class="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                
-                <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-8">
-                        <span class="font-mono text-[10px] text-ash tracking-widest border border-white/10 px-2 py-1 group-hover:border-gold/50 transition-colors">MODULE_01</span>
-                        <i data-lucide="fingerprint" class="w-6 h-6 text-gold opacity-50 group-hover:opacity-100 transition-opacity"></i>
-                    </div>
-                    <h3 class="font-serif text-4xl text-white mb-4 group-hover:text-gold transition-colors duration-500">ORIGIN<span class="text-xl align-top">™</span></h3>
-                    <p class="font-mono text-[10px] text-ash uppercase tracking-widest">Identity Extraction</p>
-                </div>
-
-                <div class="relative z-10 space-y-6">
-                    <p class="text-ash font-light text-xs leading-relaxed group-hover:text-white transition-colors duration-500">
-                        The first step. Extract your semantic fingerprint. Decode your daemon. Build the strategy only you can build.
-                    </p>
-                    <div class="flex items-center gap-2 text-gold text-[10px] font-mono uppercase tracking-widest group-hover:translate-x-2 transition-transform duration-300">
-                        <span>Initiate Protocol</span>
-                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                    </div>
-                </div>
-            </a>
-
-            <!-- EVOLVE CARD --><a href="https://evolve.thehuman.plus" class="group relative h-[500px] bg-obsidian border-r border-white/5 p-8 flex flex-col justify-between overflow-hidden hover:bg-stone transition-colors duration-700">
-                <div class="absolute inset-0 bg-noise opacity-20"></div>
-                 <!-- Hover Glow --><div class="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                 
-                <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-8">
-                        <span class="font-mono text-[10px] text-ash tracking-widest border border-white/10 px-2 py-1 group-hover:border-gold/50 transition-colors">MODULE_02</span>
-                        <i data-lucide="zap" class="w-6 h-6 text-gold opacity-50 group-hover:opacity-100 transition-opacity"></i>
-                    </div>
-                    <h3 class="font-serif text-4xl text-white mb-4 group-hover:text-gold transition-colors duration-500">EVOLVE</h3>
-                    <p class="font-mono text-[10px] text-ash uppercase tracking-widest">Action Cohort</p>
-                </div>
-
-                <div class="relative z-10 space-y-6">
-                    <p class="text-ash font-light text-xs leading-relaxed group-hover:text-white transition-colors duration-500">
-                        The implementation. A 6-week high-intensity cohort to transmute your Codex into tangible reality.
-                    </p>
-                    <div class="flex items-center gap-2 text-gold text-[10px] font-mono uppercase tracking-widest group-hover:translate-x-2 transition-transform duration-300">
-                        <span>Join Waitlist</span>
-                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                    </div>
-                </div>
-            </a>
-
-            <!-- INITIATE CARD --><a href="https://initiate.thehuman.plus" class="group relative h-[500px] bg-obsidian p-8 flex flex-col justify-between overflow-hidden hover:bg-stone transition-colors duration-700">
-                <div class="absolute inset-0 bg-noise opacity-20"></div>
-                 <!-- Hover Glow --><div class="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                 
-                <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-8">
-                        <span class="font-mono text-[10px] text-ash tracking-widest border border-white/10 px-2 py-1 group-hover:border-gold/50 transition-colors">MODULE_03</span>
-                        <i data-lucide="mountain" class="w-6 h-6 text-gold opacity-50 group-hover:opacity-100 transition-opacity"></i>
-                    </div>
-                    <h3 class="font-serif text-4xl text-white mb-4 group-hover:text-gold transition-colors duration-500">INITIATE</h3>
-                    <p class="font-mono text-[10px] text-ash uppercase tracking-widest">The Rite of Passage</p>
-                </div>
-
-                <div class="relative z-10 space-y-6">
-                    <p class="text-ash font-light text-xs leading-relaxed group-hover:text-white transition-colors duration-500">
-                        The final destination. Digital sovereignty requires physical grounding. A 5-day immersion to anchor your reality.
-                    </p>
-                    <div class="flex items-center gap-2 text-gold text-[10px] font-mono uppercase tracking-widest group-hover:translate-x-2 transition-transform duration-300">
-                        <span>Request Invite</span>
-                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                    </div>
-                </div>
-            </a>
-
-        </div>
-    </section>
-
-    <!-- FOOTER --><footer class="py-24 bg-void border-t border-white/5 relative overflow-hidden">
-        <div class="absolute inset-0 flex justify-center items-center opacity-[0.02] pointer-events-none">
-            <h2 class="text-[15vw] font-serif font-bold text-white">HUMAN+</h2>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-            <div class="w-12 h-12 border border-gold/30 rounded-full flex items-center justify-center mb-8">
-                <span class="font-serif text-gold font-bold text-xl">H+</span>
-            </div>
-            
-            <div class="flex flex-col md:flex-row gap-8 mb-12 font-mono text-xs text-ash uppercase tracking-widest">
-                <a href="#manifesto" class="hover:text-white transition-colors">Manifesto</a>
-                <a href="#" class="hover:text-white transition-colors">The Codex</a>
-                <a href="#" class="hover:text-white transition-colors">Contact</a>
-            </div>
-
-            <p class="font-sans text-ash/40 text-sm font-light">
-                &copy; 2025 Human Plus Institute. <br>
-                <span class="font-mono text-[10px] tracking-widest mt-2 block text-gold/40">LATENT SPACE COORDINATES: 44.42 / 26.10</span>
-            </p>
-        </div>
-    </footer>
-
-    <script>
-        lucide.createIcons();
-
-        // Scroll Reveal
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
+        // --- DATA ---
+        const CONTENT = {
+            kitchen: {
+                title: "The Kitchen",
+                lenses: {
+                    single: {
+                        summary: "A personal culinary sanctuary. The chef's island provides the perfect solo dining spot with morning light, while the high-end espresso station is integrated directly into the pantry workflow.",
+                        highlights: ["Integrated Espresso Bar", "Single-seat Breakfast Nook", "Quiet Morning Light"]
+                    },
+                    multi: {
+                        summary: "The heart of the home. Designed for simultaneous cooking and socializing, the dual-zone layout allows one person to prep while another mixes drinks without collision.",
+                        highlights: ["Dual Work Zones", "Island Seats 4", "Open Sightlines to Living"]
+                    },
+                    multigen: {
+                        summary: "Accessible and safe. The microwave drawer and low-profile counters are friendly for all ages, while the soft-close cabinetry ensures late-night snacks don't wake the house.",
+                        highlights: ["Accessible Cabinetry", "Safe Induction Cooktop", "Wide Walkways"]
+                    },
+                    investor: {
+                        summary: "Capital expenditure minimized. Full gut renovation in 2024 featuring commercial-grade Wolf appliances with 5-year transferable warranties and quartz countertops that require zero sealing.",
+                        highlights: ["2024 Reno (Permitted)", "Wolf/SubZero Package", "Quartz (Zero Maintenance)"]
+                    }
+                },
+                faq: [
+                    { q: "Is the range gas or induction?", a: "Currently gas, but a 240v outlet was pre-wired for easy induction swap." },
+                    { q: "What is the countertop material?", a: "Cambria Quartz, matte finish. Heat and scratch resistant." }
+                ],
+                stats: [
+                    { label: "Island Size", value: "9 ft", type: "bar", percent: 90 },
+                    { label: "Storage Vol", value: "High", type: "bar", percent: 85 }
+                ]
+            },
+            layout: {
+                title: "Layout & Flow",
+                lenses: {
+                    single: {
+                        summary: "Efficient and cozy. The open plan doesn't feel cavernous for one. You can easily close off the guest wing to create a manageable, intimate core living space.",
+                        highlights: ["Lock-and-Leave Guest Wing", "Intimate Main Core", "Smart Lighting Zones"]
+                    },
+                    multi: {
+                        summary: "Zoned for harmony. The split-bedroom design ensures the primary suite is acoustically isolated from the secondary bedrooms. The circular flow is perfect for parties.",
+                        highlights: ["Acoustic Separation", "Circular Party Flow", "Dual Living Areas"]
+                    },
+                    multigen: {
+                        summary: "Privacy with proximity. The first-floor en-suite is step-free, perfect for grandparents or an au pair, providing autonomy while remaining connected to the main action.",
+                        highlights: ["Step-free Suite", "Wide Doorways (36\")", "Private Garden Access"]
+                    },
+                    investor: {
+                        summary: "Maximized square footage utility. No wasted hallway space. The bonus room is legally permitted as a 4th bedroom, adding significant appraisal value.",
+                        highlights: ["Legally 4 Bedroom", "Open Concept ROI", "Flexible Bonus Room"]
+                    }
+                },
+                faq: [
+                    { q: "Are walls load bearing?", a: "The wall between kitchen and dining is not, allowing further expansion." },
+                    { q: "Ceiling height?", a: "10ft on main level, 9ft on upper." }
+                ],
+                stats: [
+                    { label: "Openness", value: "9/10", type: "circle", percent: 90 },
+                    { label: "Privacy", value: "8/10", type: "circle", percent: 80 }
+                ]
+            },
+            suite: {
+                title: "Primary Suite",
+                lenses: {
+                    single: {
+                        summary: "Your private retreat. Includes a dedicated reading nook and a spa-like bath that feels like a 5-star hotel stay every night.",
+                        highlights: ["Reading Nook", "Steam Shower", "Blackout Shades"]
+                    },
+                    multi: {
+                        summary: "Built for two. Dual walk-in closets eliminate storage arguments. The bathroom features separate vanities and a water closet for privacy.",
+                        highlights: ["Dual Closets", "Split Vanities", "Sound-insulated Walls"]
+                    },
+                    multigen: {
+                        summary: "A quiet escape within a busy home. Located on the upper level, away from the high-traffic main floor, ensuring rest even when the house is active.",
+                        highlights: ["Upper Level Privacy", "Soaking Tub", "Sound Insulation"]
+                    },
+                    investor: {
+                        summary: "Luxury comp driver. The size of the master bath and the custom closet systems command a premium rental or resale price in this zip code.",
+                        highlights: ["Luxury Bath Fixtures", "Custom Closet Systems", "High-Value Sq Ft"]
+                    }
+                },
+                faq: [
+                    { q: "Does the bathroom have heated floors?", a: "Yes, dual-zone radiant heating." },
+                    { q: "How large is the closet?", a: "120 sq ft with custom island." }
+                ],
+                stats: [
+                    { label: "Sq Footage", value: "450", type: "bar", percent: 75 },
+                    { label: "Natural Light", value: "High", type: "bar", percent: 85 }
+                ]
+            },
+            systems: {
+                title: "Systems & Longevity",
+                lenses: {
+                    single: {
+                        summary: "Set it and forget it. Smart home integration allows you to control climate, security, and lighting from your phone, perfect for frequent travelers.",
+                        highlights: ["Smart Thermostat", "Remote Security", "Leak Detectors"]
+                    },
+                    multi: {
+                        summary: "High capacity comfort. 75-gallon water heater ensures hot showers for everyone, and dual-zone HVAC keeps upstairs cool while downstairs stays cozy.",
+                        highlights: ["75gal Water Heater", "Dual HVAC Zones", "High-Speed Mesh Wifi"]
+                    },
+                    multigen: {
+                        summary: "Reliability is key. Backup generator connection installed. The air filtration system is hospital-grade, ideal for sensitive family members.",
+                        highlights: ["HEPA Filtration", "Generator Ready", "consistent Temp Control"]
+                    },
+                    investor: {
+                        summary: "Low CapEx risk. Roof replaced in 2022 (50-year shingle). HVAC is 16 SEER, installed 2023. Copper plumbing throughout.",
+                        highlights: ["2022 Roof", "2023 HVAC", "Copper Plumbing"]
+                    }
+                },
+                faq: [
+                    { q: "Age of roof?", a: "New in 2022. 50-year warranty." },
+                    { q: "Internet provider?", a: "Fiber optic gigabit available." }
+                ],
+                stats: [
+                    { label: "Efficiency", value: "A+", type: "circle", percent: 95 },
+                    { label: "Maint. Cost", value: "Low", type: "circle", percent: 20 }
+                ]
+            },
+            light: {
+                title: "Light & Privacy",
+                lenses: {
+                    single: {
+                        summary: "Exposed yet private. Top-down bottom-up shades allow you to enjoy natural light all day without feeling like you're in a fishbowl.",
+                        highlights: ["Privacy Shades", "Morning Sun", "Dimmer Switches"]
+                    },
+                    multi: {
+                        summary: "Mood setting. Layers of light from recessed cans to pendant fixtures allow you to change the atmosphere from 'homework time' to 'dinner party' instantly.",
+                        highlights: ["Layered Lighting", "Sunset Views", "Dining Ambience"]
+                    },
+                    multigen: {
+                        summary: "Circadian wellness. Large windows bring in ample daylight to help regulate sleep cycles, with motion-sensor night lights for safety in hallways.",
+                        highlights: ["Abundant Daylight", "Motion Sensors", "Safety Lighting"]
+                    },
+                    investor: {
+                        summary: "Curb appeal at night. Professional landscape lighting package installed, increasing security and making the property pop in evening photos.",
+                        highlights: ["Landscape Lighting", "LED Throughout", "Security Floods"]
+                    }
+                },
+                faq: [
+                    { q: "Direction of back yard?", a: "South-facing for max sun." },
+                    { q: "Window type?", a: "Anderson 400 Series, Double Pane." }
+                ],
+                stats: [
+                    { label: "Natural Light", value: "9/10", type: "bar", percent: 90 },
+                    { label: "Privacy", value: "8/10", type: "bar", percent: 80 }
+                ]
+            },
+            outdoor: {
+                title: "Outdoor Space",
+                lenses: {
+                    single: {
+                        summary: "Low maintenance oasis. The xeriscaped garden requires minimal watering, giving you a beautiful view without the weekend chore of mowing.",
+                        highlights: ["Xeriscaping", "Hammock Spots", "Private Patio"]
+                    },
+                    multi: {
+                        summary: "Extension of the living room. The large deck connects directly to the kitchen via french doors, tripling your hosting space in the summer.",
+                        highlights: ["Large Deck", "Gas Grill Hookup", "Flat Lawn for Games"]
+                    },
+                    multigen: {
+                        summary: "Safe and accessible. Paved pathways allow for walker/wheelchair access to the garden. Fenced yard keeps pets and little ones contained.",
+                        highlights: ["Paved Paths", "Fully Fenced", "Shade Trees"]
+                    },
+                    investor: {
+                        summary: "Value add potential. Lot is zoned for an ADU (Accessory Dwelling Unit). Sewer line already has a cleanout installed for easy tie-in.",
+                        highlights: ["ADU Zoned", "Sewer Cleanout", "Auto-Irrigation"]
+                    }
+                },
+                faq: [
+                    { q: "Is the fence yours?", a: "Yes, fully owned, new cedar." },
+                    { q: "Pool potential?", a: "Yes, easement allows for 12x24 pool." }
+                ],
+                stats: [
+                    { label: "Lot Util.", value: "85%", type: "circle", percent: 85 },
+                    { label: "Sun Exp.", value: "High", type: "circle", percent: 90 }
+                ]
+            },
+             neighborhood: {
+                title: "The Neighborhood",
+                lenses: {
+                    single: {
+                        summary: "Social and convenient. 5-minute walk to the artisanal coffee shop and wine bar. Easy Uber pickup zone and proximity to downtown.",
+                        highlights: ["Walk Score 85", "Coffee Nearby", "Gym Access"]
+                    },
+                    multi: {
+                        summary: "Community focused. The annual block party is legendary. Two parks within 3 blocks means easy outings for kids and dogs.",
+                        highlights: ["Great Parks", "Block Parties", "Safe Sidewalks"]
+                    },
+                    multigen: {
+                        summary: "Services nearby. Pharmacy, grocery, and urgent care are all within a 1-mile radius. Flat terrain makes walking easy for seniors.",
+                        highlights: ["Medical Nearby", "Flat Terrain", "Quiet Streets"]
+                    },
+                    investor: {
+                        summary: "High appreciation zone. Located in the path of progress, with three new luxury developments approved on the adjacent blocks.",
+                        highlights: ["Appreciating Area", "New Devs Nearby", "Strong Comps"]
+                    }
+                },
+                faq: [
+                    { q: "HOA Fees?", a: "None. Voluntary neighborhood assoc." },
+                    { q: "School District?", a: "Rated 8/10, bus stop at corner." }
+                ],
+                stats: [
+                    { label: "Walkability", value: "85", type: "bar", percent: 85 },
+                    { label: "Safety", value: "A", type: "bar", percent: 95 }
+                ]
+            },
+            numbers: {
+                title: "Key Numbers",
+                lenses: {
+                    single: {
+                        summary: "Manageable monthly. Low utility costs thanks to efficiency upgrades mean your monthly nut is predictable.",
+                        highlights: ["Low Utilities", "Tax: $4,200/yr", "Insurance: Low"]
+                    },
+                    multi: {
+                        summary: "Budgeting made easy. No immediate big-ticket repairs needed for 5-10 years allowing you to save for that dream vacation.",
+                        highlights: ["Turn-key", "Predictable OpEx", "Efficient"]
+                    },
+                    multigen: {
+                        summary: "Shared cost benefit. If splitting costs between generations, the per-person housing cost beats renting two separate apartments significantly.",
+                        highlights: ["Cost Sharing", "ADU Potential", "Low Maint."]
+                    },
+                    investor: {
+                        summary: "The bottom line. Projected Cap Rate of 5.5% as a long-term rental. AirBnB projected gross $65k/yr based on data.",
+                        highlights: ["5.5% Cap Rate", "$65k STR Rev", "High Demand"]
+                    }
+                },
+                faq: [
+                    { q: "Price?", a: "$850,000" },
+                    { q: "Taxes?", a: "$4,200 (2024)" }
+                ],
+                stats: [
+                    { label: "Price/SqFt", value: "$310", type: "bar", percent: 60 },
+                    { label: "Market Days", value: "4", type: "bar", percent: 10 }
+                ]
             }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal();
+        };
 
-        // Custom Cursor Logic (only active on desktop)
-        const cursorDot = document.querySelector(".cursor-dot");
-        const cursorOutline = document.querySelector(".cursor-outline");
+        const TAB_ORDER = ['kitchen', 'layout', 'suite', 'systems', 'light', 'outdoor', 'neighborhood', 'numbers'];
+        const LENS_ORDER = ['single', 'multi', 'multigen', 'investor'];
+        const LENS_LABELS = {
+            single: "Single Occupant",
+            multi: "Multi Occupant",
+            multigen: "Multi Generation",
+            investor: "Investor"
+        };
 
-        if (window.matchMedia("(min-width: 768px)").matches) {
-            window.addEventListener("mousemove", function (e) {
-                const posX = e.clientX;
-                const posY = e.clientY;
+        // --- COMPONENTS ---
 
-                cursorDot.style.left = `${posX}px`;
-                cursorDot.style.top = `${posY}px`;
+        const NavButton = ({ id, active, onClick, children }) => {
+            const Icon = Icons[id.charAt(0).toUpperCase() + id.slice(1)] || Icons.Numbers;
+            return (
+                <button 
+                    onClick={onClick}
+                    className={`
+                        w-full flex items-center space-x-3 px-6 py-4 transition-all duration-300 group
+                        ${active 
+                            ? 'bg-brand-500/10 border-r-4 border-brand-500 text-brand-900' 
+                            : 'text-gray-500 hover:bg-white/40 hover:text-gray-900'}
+                    `}
+                >
+                    <span className={`${active ? 'text-brand-500' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                        <Icon />
+                    </span>
+                    <span className={`font-medium tracking-wide ${active ? 'font-semibold' : ''}`}>
+                        {children}
+                    </span>
+                </button>
+            );
+        };
 
-                // Outline follows with delay
-                cursorOutline.animate({
-                    left: `${posX}px`,
-                    top: `${posY}px`
-                }, { duration: 500, fill: "forwards" });
-            });
+        const MobileNav = ({ activeTab, onTabChange }) => {
+            return (
+                <div className="md:hidden fixed top-0 left-0 right-0 z-50 overflow-x-auto no-scrollbar glass-nav border-b border-white/20">
+                    <div className="flex px-4 py-3 space-x-4 min-w-max">
+                        {TAB_ORDER.map(key => {
+                             const Icon = Icons[key.charAt(0).toUpperCase() + key.slice(1)] || Icons.Numbers;
+                             const isActive = activeTab === key;
+                             return (
+                                <button 
+                                    key={key}
+                                    onClick={() => onTabChange(key)}
+                                    className={`
+                                        flex flex-col items-center space-y-1 min-w-[60px] pb-1 border-b-2 transition-colors
+                                        ${isActive ? 'border-brand-500 text-brand-900' : 'border-transparent text-gray-400'}
+                                    `}
+                                >
+                                    <Icon />
+                                    <span className="text-[10px] font-medium uppercase tracking-wider">{key}</span>
+                                </button>
+                             )
+                        })}
+                    </div>
+                </div>
+            );
+        };
 
-            // Hover effect for links
-            const links = document.querySelectorAll('a, button');
-            links.forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    cursorOutline.style.width = '50px';
-                    cursorOutline.style.height = '50px';
-                    cursorOutline.style.backgroundColor = 'rgba(184, 138, 110, 0.1)'; // Updated hover color
-                });
-                link.addEventListener('mouseleave', () => {
-                    cursorOutline.style.width = '30px';
-                    cursorOutline.style.height = '30px';
-                    cursorOutline.style.backgroundColor = 'transparent';
-                });
-            });
-        }
+        const LensPill = ({ id, active, onClick }) => (
+            <button
+                onClick={onClick}
+                className={`
+                    px-5 py-2 rounded-full text-sm font-medium transition-all duration-300
+                    ${active 
+                        ? 'glass-pill-active transform scale-105' 
+                        : 'glass-pill text-gray-500 hover:text-brand-500'}
+                `}
+            >
+                {LENS_LABELS[id]}
+            </button>
+        );
+
+        const StatCircle = ({ percent, label, value }) => (
+            <div className="flex flex-col items-center space-y-2">
+                <div className="relative w-20 h-20">
+                    <svg className="w-full h-full transform -rotate-90">
+                        <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-brand-500/20" />
+                        <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="6" fill="transparent" 
+                            strokeDasharray={226} 
+                            strokeDashoffset={226 - (226 * percent / 100)}
+                            className="text-white transition-all duration-1000 ease-out" 
+                        />
+                    </svg>
+                    <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center font-bold text-white">
+                        {value}
+                    </div>
+                </div>
+                <span className="text-xs uppercase tracking-wider text-brand-100 text-center">{label}</span>
+            </div>
+        );
+
+        const StatBar = ({ percent, label, value }) => (
+            <div className="w-full">
+                <div className="flex justify-between text-sm mb-1">
+                    <span className="text-brand-100 font-medium">{label}</span>
+                    <span className="font-bold text-white">{value}</span>
+                </div>
+                <div className="h-2 bg-brand-500/30 rounded-full overflow-hidden backdrop-blur-sm">
+                    <div 
+                        className="h-full bg-white rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+                        style={{ width: `${percent}%` }}
+                    ></div>
+                </div>
+            </div>
+        );
+
+        const FAQItem = ({ q, a }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <div className="border-b border-gray-200/50 last:border-0">
+                    <button 
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="w-full text-left py-4 flex justify-between items-center group"
+                    >
+                        <span className="font-medium text-gray-800 group-hover:text-brand-500 transition-colors">{q}</span>
+                        <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
+                             <Icons.ArrowRight />
+                        </span>
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-24 opacity-100 mb-4' : 'max-h-0 opacity-0'}`}>
+                        <p className="text-sm text-gray-600 pr-4">{a}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('kitchen');
+            const [activeLens, setActiveLens] = useState('single');
+            const [animating, setAnimating] = useState(false);
+
+            const currentData = CONTENT[activeTab];
+            const lensData = currentData.lenses[activeLens];
+
+            // Handle tab switch animation
+            useEffect(() => {
+                setAnimating(true);
+                const timer = setTimeout(() => setAnimating(false), 400);
+                return () => clearTimeout(timer);
+            }, [activeTab]);
+
+            return (
+                <div className="flex min-h-screen">
+                    {/* Desktop Sidebar (Glass) */}
+                    <aside className="hidden md:flex flex-col w-64 lg:w-72 glass-nav fixed h-full z-10">
+                        <div className="p-8 pb-4">
+                            <h2 className="text-2xl font-serif font-bold text-brand-900 leading-tight">1240 Highland</h2>
+                            <p className="text-sm text-brand-500 font-medium mt-1">$850,000 · Active</p>
+                        </div>
+                        <nav className="flex-1 overflow-y-auto py-4">
+                            {TAB_ORDER.map(key => (
+                                <NavButton 
+                                    key={key} 
+                                    id={key} 
+                                    active={activeTab === key} 
+                                    onClick={() => {
+                                        window.scrollTo(0,0);
+                                        setActiveTab(key);
+                                    }}
+                                >
+                                    {CONTENT[key].title}
+                                </NavButton>
+                            ))}
+                        </nav>
+                        <div className="p-6 border-t border-white/30">
+                             <button className="w-full py-3 bg-brand-900 text-white font-medium rounded hover:bg-brand-500 transition-colors shadow-lg shadow-brand-500/30">
+                                Schedule Tour
+                            </button>
+                        </div>
+                    </aside>
+
+                    {/* Mobile Nav */}
+                    <MobileNav activeTab={activeTab} onTabChange={(t) => {
+                        window.scrollTo(0,0);
+                        setActiveTab(t);
+                    }} />
+
+                    {/* Main Content Area */}
+                    <main className="flex-1 md:ml-64 lg:ml-72 pt-24 md:pt-0 w-full transition-opacity duration-300">
+                        
+                        {/* Hero Section of the Page */}
+                        <div className="max-w-4xl mx-auto px-6 py-8 md:py-16">
+                            
+                            {/* Header */}
+                            <div className={`transition-all duration-500 ${animating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+                                <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2 drop-shadow-sm">
+                                    {currentData.title}
+                                </h1>
+                                <div className="h-1 w-20 bg-brand-500 mb-8 rounded-full shadow-sm"></div>
+                            </div>
+
+                            {/* Lens Selector */}
+                            <div className="mb-10">
+                                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Select Your Perspective</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {LENS_ORDER.map(lens => (
+                                        <LensPill 
+                                            key={lens} 
+                                            id={lens} 
+                                            active={activeLens === lens} 
+                                            onClick={() => setActiveLens(lens)} 
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Dynamic Content Block */}
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                                
+                                {/* Left Column: Description & Highlights */}
+                                <div className="lg:col-span-2 space-y-8">
+                                    <div className={`glass-panel rounded-2xl p-8 transition-all duration-500 ${animating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+                                        <div className="flex items-center space-x-2 mb-4 text-brand-500">
+                                            <Icons.Check />
+                                            <span className="text-sm font-bold uppercase tracking-wider">{LENS_LABELS[activeLens]} View</span>
+                                        </div>
+                                        <p className="text-lg leading-relaxed text-gray-800 font-light font-serif">
+                                            {lensData.summary}
+                                        </p>
+                                    </div>
+
+                                    {/* Highlights Grid */}
+                                    <div>
+                                        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 pl-2">Highlights</h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                            {lensData.highlights.map((h, i) => (
+                                                <div key={i} className="flex items-start space-x-2 p-3 glass-panel rounded-lg hover:bg-white/60 transition-colors cursor-default">
+                                                    <div className="mt-1 text-brand-500">
+                                                        <Icons.Check />
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-700">{h}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* FAQ Section */}
+                                    <div className="pt-8">
+                                        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 pl-2">Questions asked by {activeLens === 'investor' ? 'Investors' : 'Buyers'}</h3>
+                                        <div className="glass-panel rounded-xl">
+                                            {currentData.faq.map((item, i) => (
+                                                <FAQItem key={i} q={item.q} a={item.a} />
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Column: Data Viz */}
+                                <div className="lg:col-span-1">
+                                    <div className="glass-card-dark rounded-2xl p-6 text-white sticky top-8 border-t border-white/20">
+                                        <h3 className="text-sm font-bold text-brand-100 uppercase tracking-wider mb-6 border-b border-brand-500/30 pb-2">Data Points</h3>
+                                        
+                                        <div className="space-y-8">
+                                            {currentData.stats.map((stat, i) => (
+                                                <div key={i}>
+                                                    {stat.type === 'circle' ? (
+                                                        <div className="flex justify-center py-2">
+                                                            <StatCircle percent={stat.percent} label={stat.label} value={stat.value} />
+                                                        </div>
+                                                    ) : (
+                                                        <StatBar percent={stat.percent} label={stat.label} value={stat.value} />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="mt-8 pt-6 border-t border-brand-500/30 text-center">
+                                            <p className="text-xs text-brand-100 italic">Data updated: Jan 2026</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                            {/* Footer for scrolling space */}
+                            <div className="h-32"></div>
+                        </div>
+                    </main>
+
+                    {/* Mobile Call to Action (Sticky Bottom) */}
+                    <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 glass-panel border-t border-white/40 z-50">
+                        <button className="w-full py-3 bg-brand-900 text-white font-medium rounded hover:bg-brand-800 transition-colors shadow-lg">
+                            Schedule Tour ($850k)
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
