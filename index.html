@@ -15,6 +15,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- HTML2PDF for Brochure Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
@@ -106,7 +109,12 @@
             border: 1px solid rgba(74, 108, 111, 0.2);
             box-shadow: 0 4px 12px rgba(74, 108, 111, 0.3);
         }
-
+        
+        /* Print/PDF Specific Styles */
+        #brochure-content {
+            display: none;
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -130,13 +138,17 @@
             Neighborhood: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 21v-8a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v8"/><path d="M2 11h11"/><path d="M20 21v-8a2 2 0 0 0-2-2h-3"/><path d="M15 11h5"/><path d="M7 21v-4a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v4"/><path d="M3 7 7 3l4 4"/><path d="M15 7l3-4 4 4"/></svg>,
             Numbers: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
             Check: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-            ArrowRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            ArrowRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
+            Phone: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
+            Mail: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>,
+            Download: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
         };
 
         // --- DATA ---
         const CONTENT = {
             kitchen: {
                 title: "The Kitchen",
+                agentTip: "Most buyers miss this: The island is a single slab of quartz with no seams. It's cleaner, more durable, and vastly more expensive to install than standard stone.",
                 lenses: {
                     single: {
                         summary: "A personal culinary sanctuary. The chef's island provides the perfect solo dining spot with morning light, while the high-end espresso station is integrated directly into the pantry workflow.",
@@ -166,6 +178,7 @@
             },
             layout: {
                 title: "Layout & Flow",
+                agentTip: "The genius of this layout is the sightline from the front door to the backyard. It subconsciously makes the home feel 500 sq ft larger than it is.",
                 lenses: {
                     single: {
                         summary: "Efficient and cozy. The open plan doesn't feel cavernous for one. You can easily close off the guest wing to create a manageable, intimate core living space.",
@@ -195,6 +208,7 @@
             },
             suite: {
                 title: "Primary Suite",
+                agentTip: "We installed 5/8th inch drywall between the bedroom and living area specifically for sound dampening. Shift workers love this feature.",
                 lenses: {
                     single: {
                         summary: "Your private retreat. Includes a dedicated reading nook and a spa-like bath that feels like a 5-star hotel stay every night.",
@@ -224,6 +238,7 @@
             },
             systems: {
                 title: "Systems & Longevity",
+                agentTip: "Don't overlook the copper plumbing. In 20 years, when neighbors with cheap PEX are repiping, this home will still be standing strong.",
                 lenses: {
                     single: {
                         summary: "Set it and forget it. Smart home integration allows you to control climate, security, and lighting from your phone, perfect for frequent travelers.",
@@ -253,6 +268,7 @@
             },
             light: {
                 title: "Light & Privacy",
+                agentTip: "Come back at 4 PM. The way the western sun hits the dining room wall turns it into a natural light box. It's magical for early dinners.",
                 lenses: {
                     single: {
                         summary: "Exposed yet private. Top-down bottom-up shades allow you to enjoy natural light all day without feeling like you're in a fishbowl.",
@@ -282,6 +298,7 @@
             },
             outdoor: {
                 title: "Outdoor Space",
+                agentTip: "The retaining wall isn't just decorative. It's fully engineered to support a future pool deck if you ever decide to expand the patio.",
                 lenses: {
                     single: {
                         summary: "Low maintenance oasis. The xeriscaped garden requires minimal watering, giving you a beautiful view without the weekend chore of mowing.",
@@ -311,6 +328,7 @@
             },
              neighborhood: {
                 title: "The Neighborhood",
+                agentTip: "The barista at the corner cafe actually knows everyone's dog by name. It's that kind of community—hard to quantify, but invaluable.",
                 lenses: {
                     single: {
                         summary: "Social and convenient. 5-minute walk to the artisanal coffee shop and wine bar. Easy Uber pickup zone and proximity to downtown.",
@@ -340,6 +358,7 @@
             },
             numbers: {
                 title: "Key Numbers",
+                agentTip: "The tax abatement on this property transfers with the deed. It effectively lowers your monthly payment by $300 for the next 4 years.",
                 lenses: {
                     single: {
                         summary: "Manageable monthly. Low utility costs thanks to efficiency upgrades mean your monthly nut is predictable.",
@@ -442,6 +461,28 @@
             </button>
         );
 
+        const AgentInsight = ({ tip }) => (
+            <div className="glass-panel p-5 rounded-2xl flex items-start gap-4 border-l-4 border-l-brand-500 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-500/10 rounded-full blur-2xl transform translate-x-12 -translate-y-12"></div>
+                <div className="relative flex-shrink-0">
+                    <img 
+                        src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200" 
+                        alt="Agent Profile" 
+                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md"
+                    />
+                    <div className="absolute -bottom-1 -right-1 bg-brand-900 text-white p-1 rounded-full border border-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                    </div>
+                </div>
+                <div className="relative z-10">
+                    <h4 className="text-[10px] font-bold text-brand-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                        Agent Insight
+                    </h4>
+                    <p className="text-sm text-gray-700 italic leading-relaxed">"{tip}"</p>
+                </div>
+            </div>
+        );
+
         const StatCircle = ({ percent, label, value }) => (
             <div className="flex flex-col items-center space-y-2">
                 <div className="relative w-20 h-20">
@@ -495,11 +536,51 @@
                 </div>
             );
         };
+        
+        // --- HIDDEN BROCHURE COMPONENT (For PDF Generation) ---
+        const BrochureContent = ({ activeLens }) => (
+            <div id="brochure-content" className="p-8 bg-white text-slate-800 font-sans">
+                <div className="mb-10 text-center border-b-2 border-brand-500 pb-6">
+                    <h1 className="text-4xl font-serif font-bold text-brand-900 mb-2">1240 Highland Avenue</h1>
+                    <p className="text-lg text-brand-500 uppercase tracking-widest">{LENS_LABELS[activeLens]} Information Packet</p>
+                </div>
+                
+                {TAB_ORDER.map(key => {
+                    const section = CONTENT[key];
+                    const lensInfo = section.lenses[activeLens];
+                    
+                    return (
+                        <div key={key} className="mb-8 break-inside-avoid">
+                            <h2 className="text-2xl font-serif font-bold text-brand-900 mb-3 border-l-4 border-brand-500 pl-3">{section.title}</h2>
+                            <p className="mb-4 text-gray-700 leading-relaxed">{lensInfo.summary}</p>
+                            
+                            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Highlights</h3>
+                                <ul className="list-disc list-inside text-sm text-gray-700 grid grid-cols-2 gap-2">
+                                    {lensInfo.highlights.map(h => <li key={h}>{h}</li>)}
+                                </ul>
+                            </div>
+                            
+                            {section.agentTip && (
+                                <div className="text-sm italic text-brand-500 border-l-2 border-brand-500 pl-3 py-1 bg-brand-50/50 mb-4">
+                                    Agent Tip: {section.agentTip}
+                                </div>
+                            )}
+                        </div>
+                    )
+                })}
+                
+                <div className="mt-12 text-center text-xs text-gray-400">
+                    Generated from Interactive Listing Site · {new Date().toLocaleDateString()}
+                </div>
+            </div>
+        );
 
         const App = () => {
             const [activeTab, setActiveTab] = useState('kitchen');
             const [activeLens, setActiveLens] = useState('single');
             const [animating, setAnimating] = useState(false);
+            const [generatingPdf, setGeneratingPdf] = useState(false);
 
             const currentData = CONTENT[activeTab];
             const lensData = currentData.lenses[activeLens];
@@ -510,9 +591,32 @@
                 const timer = setTimeout(() => setAnimating(false), 400);
                 return () => clearTimeout(timer);
             }, [activeTab]);
+            
+            // PDF Generation Function
+            const handleDownloadPdf = () => {
+                setGeneratingPdf(true);
+                const element = document.getElementById('brochure-content');
+                element.style.display = 'block'; // Temporarily show for capture
+                
+                const opt = {
+                    margin: 1,
+                    filename: `1240_Highland_${activeLens}_Overview.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    element.style.display = 'none';
+                    setGeneratingPdf(false);
+                });
+            };
 
             return (
                 <div className="flex min-h-screen">
+                    {/* Render hidden brochure content */}
+                    <BrochureContent activeLens={activeLens} />
+                
                     {/* Desktop Sidebar (Glass) */}
                     <aside className="hidden md:flex flex-col w-64 lg:w-72 glass-nav fixed h-full z-10">
                         <div className="p-8 pb-4">
@@ -534,9 +638,33 @@
                                 </NavButton>
                             ))}
                         </nav>
-                        <div className="p-6 border-t border-white/30">
-                             <button className="w-full py-3 bg-brand-900 text-white font-medium rounded hover:bg-brand-500 transition-colors shadow-lg shadow-brand-500/30">
-                                Schedule Tour
+                        
+                        {/* New Sidebar Contact Section */}
+                        <div className="p-6 border-t border-white/30 space-y-3">
+                             <div className="grid grid-cols-2 gap-3">
+                                <button className="flex flex-col items-center justify-center p-3 rounded-xl bg-white/40 hover:bg-brand-500 hover:text-white transition-all text-brand-900 border border-white/50 backdrop-blur-md shadow-sm group">
+                                    <Icons.Phone />
+                                    <span className="text-[10px] font-bold uppercase mt-1 tracking-wider">Call</span>
+                                </button>
+                                <button className="flex flex-col items-center justify-center p-3 rounded-xl bg-white/40 hover:bg-brand-500 hover:text-white transition-all text-brand-900 border border-white/50 backdrop-blur-md shadow-sm group">
+                                    <Icons.Mail />
+                                    <span className="text-[10px] font-bold uppercase mt-1 tracking-wider">Email</span>
+                                </button>
+                             </div>
+                             
+                             <button 
+                                onClick={handleDownloadPdf}
+                                disabled={generatingPdf}
+                                className="w-full flex items-center justify-center space-x-2 py-3 bg-brand-900 text-white font-medium rounded hover:bg-brand-500 transition-colors shadow-lg shadow-brand-500/30 text-sm"
+                            >
+                                {generatingPdf ? (
+                                    <span>Generating...</span>
+                                ) : (
+                                    <>
+                                        <Icons.Download />
+                                        <span>Download PDF</span>
+                                    </>
+                                )}
                             </button>
                         </div>
                     </aside>
@@ -563,7 +691,10 @@
 
                             {/* Lens Selector */}
                             <div className="mb-10">
-                                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Select Your Perspective</p>
+                                <div className="flex justify-between items-end mb-3">
+                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Select Your Perspective</p>
+                                    <span className="text-[10px] text-brand-500 bg-brand-50 px-2 py-1 rounded hidden md:inline-block">PDF will match selected lens</span>
+                                </div>
                                 <div className="flex flex-wrap gap-2">
                                     {LENS_ORDER.map(lens => (
                                         <LensPill 
@@ -589,6 +720,11 @@
                                         <p className="text-lg leading-relaxed text-gray-800 font-light font-serif">
                                             {lensData.summary}
                                         </p>
+                                    </div>
+
+                                    {/* Agent Expertise Section - NEW */}
+                                    <div className={`transition-all duration-500 delay-100 ${animating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
+                                        <AgentInsight tip={currentData.agentTip} />
                                     </div>
 
                                     {/* Highlights Grid */}
@@ -649,11 +785,18 @@
                         </div>
                     </main>
 
-                    {/* Mobile Call to Action (Sticky Bottom) */}
+                    {/* Mobile Call to Action (Sticky Bottom) - UPDATED */}
                     <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 glass-panel border-t border-white/40 z-50">
-                        <button className="w-full py-3 bg-brand-900 text-white font-medium rounded hover:bg-brand-800 transition-colors shadow-lg">
-                            Schedule Tour ($850k)
-                        </button>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button className="flex items-center justify-center space-x-2 py-3 bg-white text-brand-900 font-bold border-2 border-brand-900 rounded hover:bg-gray-50 transition-colors shadow-lg">
+                                <Icons.Phone />
+                                <span>Call</span>
+                            </button>
+                            <button className="flex items-center justify-center space-x-2 py-3 bg-brand-900 text-white font-bold rounded hover:bg-brand-800 transition-colors shadow-lg">
+                                <Icons.Mail />
+                                <span>Email</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             );
